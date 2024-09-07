@@ -1,7 +1,3 @@
-Here's the complete documentation for working with Apache Hadoop 3.4.0 on Debian, including handling input files, running MapReduce jobs, and managing output directories.
-
----
-
 # Apache Hadoop 3.4.0 Documentation on Debian
 
 ## Table of Contents
