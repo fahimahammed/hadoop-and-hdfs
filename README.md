@@ -6,6 +6,7 @@
 3. [Lab 24: Installing Hadoop Framework](#lab-24-installing-hadoop-framework)
 4. [Lab 25: Query Processing in HDFS](#lab-25-query-processing-in-hdfs)
 5. [Managing Files and Running Jobs](#managing-files-and-running-jobs)
+6. [Cheat Sheet](./cheat-sheet.md)
 
 ---
 
