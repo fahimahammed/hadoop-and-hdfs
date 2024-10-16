@@ -1,0 +1,111 @@
+------------PLEASE MAKE SURE THAT YOUR SSH CONNECTION IS ESTABLISHED------------------
+
+>> ssh localhost
+>> ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa 
+>> cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+>> chmod 0600 ~/.ssh/authorized_keys
+>> hadoop-3.4.0/bin/hdfs namenode -format
+>> export PDSH_RCMD_TYPE=ssh
+>> start-all.sh
+
+----------MAP REDUCE WORD COUNT---------------------
+
+Create a file named "data and last-3 digit of your roll"
+>> touch data102.txt
+
+Create a HDFS directory named "folder and last-3 digit of your roll"
+>> hdfs dfs -mkdir /folder102
+
+
+Upload the text file (ex:data102.txt) into the hdfs folder
+>> hdfs dfs -put "location of data102.txt" /folder102
+
+## WordCount.java
+
+Create a jar file named as "wordcount and last-3 digit of your roll"
+>> export HADOOP_CLASSPATH=$(hadoop classpath)
+>> echo $HADOOP_CLASSPATH
+
+>> javac -classpath ${HADOOP_CLASSPATH} -d '/home/user/Desktop/WhatUwant/classes' '/home/user/Desktop/whatUwant/WordCount.java'
+
+>> jar -cvf wordcount102.jar -C classes/ .   [This is the command for creating jar file]
+
+Now run the program
+>>hadoop jar '/home/user/Desktop/WhatUWant/wordcount102.jar' WordCount /folder102/ /folder102/Output
+
+To see the output
+>> hdfs dfs -cat /WordCount/Output/*
+>> hdfs dfs -cat /folder126/output/part-r-00000
+
+
+---------------------HIVE-------------------------------
+
+>> cd
+>> cd hive/bin
+
+Upload the .csv file in HDFS directory which is asked to create named "folder and last 3 digit of your roll"
+>> hdfs dfs -mkdir /folder102
+>> hdfs dfs -put '/home/user/Desktop/Exam/FILE.csv' /folder102
+
+
+Create Default directory of HIVE(Habse) in HDFS 
+>> hdfs dfs -mkdir -p /user/hive/warehouse
+
+>> beeline -u jdbc:hive2://
+
+Create database into /folder102 named "student and last 3 digit of your roll"
+>> create database if not exists student102 location '/folder102/';
+>> use student102;
+
+Create Table "Info and last three digit of your roll" partitioned by Gender FOR FORMAT DELIMITED FIELDS TERMINATED BY ',' Location '/folder102/Info'
+>> create external table Info102(Id int, Name string, Age int, Gender string) row format delimited fields terminated by ',' location '/folder102/Info';
+
+Create Table "Info and last three digit of your roll" partitioned by Gender FOR FORMAT DELIMITED FIELDS TERMINATED BY ',' Location '/folder102/Info'
+>> create external table Info102(Id int, Name string, Age int) partitioned by(Gender string) row format delimited fields terminated by ',' location '/folder102/Info';
+
+
+-- Create the external table Address102 partitioned by City
+create external table if not exists Address102(Id int, City string) partitioned by (City string) row format delimited fields terminated by ',' location '/folder102/Address';
+
+-- Enable dynamic partitioning
+set hive.exec.dynamic.partition=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+
+-- Load data from CSV file into Info102 partitioned by Gender
+load data inpath '/folder102/FILE.csv' overwrite into table Info102 partition(Gender);
+
+
+CREATE EXTERNAL TABLE IF NOT EXISTS StagingAddress (Id INT, Name STRING, Age INT, Gender STRING, City STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LOCATION '/folder126/StagingAddress';  -- Create a temporary directory for staging
+
+LOAD DATA INPATH '/folder126/FILE.csv' OVERWRITE INTO TABLE StagingAddress;
+
+INSERT OVERWRITE TABLE Address126 PARTITION (City) SELECT Id, City FROM StagingAddress WHERE City IS NOT NULL;
+
+DROP TABLE IF EXISTS StagingAddress;
+
+
+-- Retrieve all data from Info102
+select * from Info102;
+
+-- Retrieve all data from Address102
+select * from Address102;
+
+
+
+SELECT 
+    i.Id, 
+    i.Name, 
+    i.Age, 
+    i.Gender, 
+    a.City
+FROM 
+    Info126 i
+JOIN 
+    Address126 a ON i.Id = a.Id;
+    
+    
+select i.id, i.name, i.gender, a.city from info126 i join address126 a on i.id = a.id where i.gender = 'F' and a.city = 'K';
+
+
+
+
